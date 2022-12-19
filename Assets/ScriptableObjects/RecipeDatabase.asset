@@ -1,0 +1,499 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9210681647406206691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Manti
+  m_EditorClassIdentifier: 
+  RecipieName: Manti
+  Ingredients:
+  - ingerientType: 3
+    count: 0
+  - ingerientType: 11
+    count: 0
+  - ingerientType: 25
+    count: 0
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-9150289240237640784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Tursu
+  m_EditorClassIdentifier: 
+  RecipieName: Tursu
+  Ingredients:
+  - ingerientType: 5
+    count: 5
+  - ingerientType: 8
+    count: 3
+  - ingerientType: 9
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-8224146024789104123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Serbet
+  m_EditorClassIdentifier: 
+  RecipieName: Serbet
+  Ingredients:
+  - ingerientType: 9
+    count: 5
+  - ingerientType: 4
+    count: 5
+  - ingerientType: 6
+    count: 2
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-8159299864882030729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Enerji Icecegi
+  m_EditorClassIdentifier: 
+  RecipieName: Enerji Icecegi
+  Ingredients:
+  - ingerientType: 9
+    count: 4
+  - ingerientType: 14
+    count: 4
+  - ingerientType: 17
+    count: 4
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-7733303236571214557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Vegan Burger
+  m_EditorClassIdentifier: 
+  RecipieName: Vegan Burger
+  Ingredients:
+  - ingerientType: 17
+    count: 3
+  - ingerientType: 11
+    count: 3
+  - ingerientType: 5
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-7603659177688447856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Sarimsakli Sos
+  m_EditorClassIdentifier: 
+  RecipieName: Sarimsakli Sos
+  Ingredients:
+  - ingerientType: 8
+    count: 3
+  - ingerientType: 25
+    count: 4
+  - ingerientType: 15
+    count: 2
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-7006966299057922673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Meyveler
+  m_EditorClassIdentifier: 
+  RecipieName: Meyveler
+  Ingredients:
+  - ingerientType: 2
+    count: 4
+  - ingerientType: 13
+    count: 4
+  - ingerientType: 6
+    count: 4
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-6592792550272805134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Havuc corbasi
+  m_EditorClassIdentifier: 
+  RecipieName: Havuc corbasi
+  Ingredients:
+  - ingerientType: 5
+    count: 5
+  - ingerientType: 25
+    count: 4
+  - ingerientType: 16
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-5512383910251439050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Meyve Sepeti
+  m_EditorClassIdentifier: 
+  RecipieName: Meyve Sepeti
+  Ingredients:
+  - ingerientType: 9
+    count: 3
+  - ingerientType: 1
+    count: 3
+  - ingerientType: 2
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-4387135931148029792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Tatli kabak
+  m_EditorClassIdentifier: 
+  RecipieName: Tatli kabak
+  Ingredients:
+  - ingerientType: 20
+    count: 5
+  - ingerientType: 10
+    count: 3
+  - ingerientType: 4
+    count: 2
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-3043031286582237803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Oralet
+  m_EditorClassIdentifier: 
+  RecipieName: Oralet
+  Ingredients:
+  - ingerientType: 17
+    count: 4
+  - ingerientType: 13
+    count: 4
+  - ingerientType: 1
+    count: 4
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-2330330463754439389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Domates corbasi
+  m_EditorClassIdentifier: 
+  RecipieName: Domates corbasi
+  Ingredients:
+  - ingerientType: 16
+    count: 2
+  - ingerientType: 21
+    count: 5
+  - ingerientType: 8
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-2200395680621847469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Vegan Pizza
+  m_EditorClassIdentifier: 
+  RecipieName: Vegan Pizza
+  Ingredients:
+  - ingerientType: 19
+    count: 4
+  - ingerientType: 21
+    count: 2
+  - ingerientType: 5
+    count: 4
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-1867059645205898399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Menemen
+  m_EditorClassIdentifier: 
+  RecipieName: Menemen
+  Ingredients:
+  - ingerientType: 16
+    count: 3
+  - ingerientType: 21
+    count: 3
+  - ingerientType: 7
+    count: 4
+  myDatabase: {fileID: 11400000}
+--- !u!114 &-1684739909803760892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Tatli Sepeti
+  m_EditorClassIdentifier: 
+  RecipieName: Tatli Sepeti
+  Ingredients:
+  - ingerientType: 3
+    count: 3
+  - ingerientType: 12
+    count: 3
+  - ingerientType: 4
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 818135d513dcd6e4892e2f07fd75f881, type: 3}
+  m_Name: RecipeDatabase
+  m_EditorClassIdentifier: 
+  recipes:
+  - {fileID: 1077952994039959825}
+  - {fileID: 2806992213120313988}
+  - {fileID: 2283671798670084229}
+  - {fileID: -5512383910251439050}
+  - {fileID: -9210681647406206691}
+  - {fileID: 6258692446489989871}
+  - {fileID: 185085350836357459}
+  - {fileID: -6592792550272805134}
+  - {fileID: -2200395680621847469}
+  - {fileID: -3043031286582237803}
+  - {fileID: -8224146024789104123}
+  - {fileID: -8159299864882030729}
+  - {fileID: -9150289240237640784}
+  - {fileID: -2330330463754439389}
+  - {fileID: -7006966299057922673}
+  - {fileID: -7733303236571214557}
+  - {fileID: -4387135931148029792}
+  - {fileID: 2155299714723431060}
+  - {fileID: 8796897608375447916}
+  - {fileID: -7603659177688447856}
+  - {fileID: -1867059645205898399}
+  - {fileID: -1684739909803760892}
+--- !u!114 &185085350836357459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Kuru yemis
+  m_EditorClassIdentifier: 
+  RecipieName: Kuru yemis
+  Ingredients:
+  - ingerientType: 0
+    count: 4
+  - ingerientType: 24
+    count: 5
+  - ingerientType: 18
+    count: 4
+  myDatabase: {fileID: 11400000}
+--- !u!114 &1077952994039959825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Corba
+  m_EditorClassIdentifier: 
+  RecipieName: Corba
+  Ingredients:
+  - ingerientType: 7
+    count: 2
+  - ingerientType: 5
+    count: 2
+  - ingerientType: 20
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &2155299714723431060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Limonata
+  m_EditorClassIdentifier: 
+  RecipieName: Limonata
+  Ingredients:
+  - ingerientType: 6
+    count: 4
+  - ingerientType: 14
+    count: 5
+  - ingerientType: 23
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &2283671798670084229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Waffle
+  m_EditorClassIdentifier: 
+  RecipieName: Waffle
+  Ingredients:
+  - ingerientType: 22
+    count: 3
+  - ingerientType: 13
+    count: 4
+  - ingerientType: 2
+    count: 5
+  myDatabase: {fileID: 11400000}
+--- !u!114 &2806992213120313988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Mayonez
+  m_EditorClassIdentifier: 
+  RecipieName: Mayonez
+  Ingredients:
+  - ingerientType: 7
+    count: 2
+  - ingerientType: 25
+    count: 4
+  - ingerientType: 7
+    count: 2
+  myDatabase: {fileID: 11400000}
+--- !u!114 &6258692446489989871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Mantar graten
+  m_EditorClassIdentifier: 
+  RecipieName: Mantar graten
+  Ingredients:
+  - ingerientType: 8
+    count: 5
+  - ingerientType: 15
+    count: 4
+  - ingerientType: 25
+    count: 3
+  myDatabase: {fileID: 11400000}
+--- !u!114 &8796897608375447916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84474d09ee07b264aafb1edb92063257, type: 3}
+  m_Name: Mantarli Pizza
+  m_EditorClassIdentifier: 
+  RecipieName: Mantarli Pizza
+  Ingredients:
+  - ingerientType: 19
+    count: 3
+  - ingerientType: 21
+    count: 3
+  - ingerientType: 15
+    count: 4
+  myDatabase: {fileID: 11400000}
