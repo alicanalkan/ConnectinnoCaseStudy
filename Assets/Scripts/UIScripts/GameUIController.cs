@@ -138,24 +138,32 @@ namespace ConnectinnoGames.UIScripts
         /// <param name="amount"></param>
         private void AddCoin(int amount)
         {
+            float aspect = (float)Screen.width / Screen.height;
+            var safeWorldHeight = Camera.main.orthographicSize * 2;
+
+            var safeWorldWidth = safeWorldHeight * aspect;
+            var worldPadding = 2;
+            safeWorldWidth -= worldPadding;
+            safeWorldHeight -= worldPadding;
+
             for (int i = 0; i < amount; i++)
             {
                 var coinImage = poolManager.GetPoolObject(PoolObjectType.CoinImage);
                 coinImage.transform.SetParent(transform);
                 coinImage.transform.localScale = Vector3.one;
                 coinImage.GetComponent<RectTransform>().anchoredPosition = panPosition;
-                Sequence tweenerSequence = DOTween.Sequence();
-                Tween coinImageY = coinImage.transform.DOMoveY(coinImageTransform.position.y, Random.Range(1f, 2f));
-                tweenerSequence = tweenerSequence.Append(coinImageY);
 
-                Tween coinImageX = coinImage.transform.DOMoveX(coinImageTransform.position.x, .75f);
-                tweenerSequence.Join(coinImageX).PrependInterval(1).OnComplete(() =>
+                var controlPoint = new Vector3(x: -safeWorldWidth / 2, y:0,z: -safeWorldHeight / 2);
+                var midControlPoint = new Vector3(-safeWorldWidth / 2, 0, 0);
+
+                Vector3[] positionArray = new[] { coinImageTransform.position, controlPoint, midControlPoint };
+
+                coinImage.transform.DOPath(positionArray, Random.Range(1.5f, 3f), PathType.CubicBezier).OnComplete(() =>
                 {
                     coinAmount++;
                     coinText.text = coinAmount.ToString();
                     soundManager.PlayCoin();
                 });
-               
             }
             gameManager.AddCoin(amount);
         }
@@ -178,7 +186,7 @@ namespace ConnectinnoGames.UIScripts
         {
             ConnectinnoActions.OnRecipeStarted += UpdateRecipeUI;
             ConnectinnoActions.OnExtraSeconds += Extra30Seconds;
-            ConnectinnoActions.OnNextLevelStarted += StartGameTimer;
+            ConnectinnoActions.StartTimer += StartGameTimer;
             ConnectinnoActions.OnRecipeCompleted += OnRecipeCompleted;
             ConnectinnoActions.OnAddCoin += AddCoin;
             ConnectinnoActions.OnRemoveCoin += RemoveCoin;
@@ -188,7 +196,7 @@ namespace ConnectinnoGames.UIScripts
         /// </summary>
         private void OnDisable()
         {
-            ConnectinnoActions.OnNextLevelStarted -= StartGameTimer;
+            ConnectinnoActions.StartTimer -= StartGameTimer;
             ConnectinnoActions.OnExtraSeconds -= Extra30Seconds;
             ConnectinnoActions.OnRecipeCompleted -= OnRecipeCompleted;
             ConnectinnoActions.OnRecipeStarted -= UpdateRecipeUI;

@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
     private GameManager gameManager;
     private PoolManager poolManager;
 
+    private float clicked = 0;
+    private float clicktime = 0;
+    //Double Click Time
+    private float clickdelay = 0.5f;
+
     private void Start()
     {
         panGrids = pan.GetComponent<PanGrids>();
@@ -32,10 +37,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        
         if (DoubleClick())
         {
             if (IsPointerOverUIElement()) return;
-
             var mouse = Input.mousePosition;
             var ray = Camera.main.ScreenPointToRay(mouse);
 
@@ -45,33 +50,42 @@ public class PlayerController : MonoBehaviour
                 var durationMultiplier = Vector2.Distance(hit.transform.position, panGrids.panPositions[index].gridPos);
 
                 Ingredient ingredient = hit.transform.GetComponent<Ingredient>();
-                ingredient.isInPan = true;
-                
 
+                //Calculate animaton time
                 var animationTime = 5 / durationMultiplier;
 
                 if (animationTime > 1)
                     animationTime = 1;
 
-                hit.transform.DOMove(panGrids.panPositions[index].gridPos, animationTime).OnComplete(() => {
-                    if (gameManager.IsIngredientCorrect((int)ingredient.type))
-                    {
-                        index++;
-                        hit.transform.SetParent(PanLayer);
-                        //var coinImage =  poolManager.GetPoolObject(PoolObjectType.CoinImage);
 
-                    }
-                    else
-                    {
+                hit.transform.SetParent(PanLayer);
+
+                // Create tween path 
+                Vector3[] positionArray = new[] { new Vector3(hit.transform.position.x, pan.transform.position.y, hit.transform.position.z), panGrids.panPositions[index].gridPos };
+
+                if (gameManager.IsIngredientCorrect((int)ingredient.type))
+                {
+                    
+                    hit.transform.DOPath(positionArray, animationTime);
+                    hit.transform.gameObject.layer = 7;
+                    hit.transform.localEulerAngles = Vector3.zero;
+                    hit.transform.GetComponent<Rigidbody>().isKinematic = true;
+                    
+                    index++;
+                }
+                else
+                {
+                    //Reset transform tweens;
+                    hit.transform.DOPath(positionArray, animationTime).OnComplete(() => {
                         hit.transform.DOMove(gameManager.GetRandomSafePosition(), animationTime);
-                        ingredient.isInPan = false;
-                        //index--;
-                    }
-                });
+                    });
+                    hit.transform.SetParent(gameManager.transform);
+                }
             }
         }
         else
         {
+            //Drag handler
             if (Input.GetMouseButtonDown(0))
             {
                 if(IsPointerOverUIElement()) return;
@@ -81,11 +95,7 @@ public class PlayerController : MonoBehaviour
 
                 if (Physics.Raycast(ray, out var hit, Mathf.Infinity, ingredientsLayerMask))
                 {
-                    Ingredient ingredient = hit.transform.GetComponent<Ingredient>();
-                    if (!ingredient.isInPan)
-                    {
-                        IngredientDragReferenceData.TempObjBeingDragged = hit.transform.gameObject;
-                    }
+                    IngredientDragReferenceData.TempObjBeingDragged = hit.transform.gameObject;
                 }
                 else
                 {
@@ -101,15 +111,14 @@ public class PlayerController : MonoBehaviour
 
         if (IngredientDragReferenceData.TempObjBeingDragged != null)
         {
+            //Tack input position and drag object
+            if (IsPointerOverUIElement()) return;
             var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            var desiredPosition = new Vector2(worldPosition.x, worldPosition.y);
+            var desiredPosition = new Vector3(worldPosition.x, 1, worldPosition.z);
             IngredientDragReferenceData.TempObjBeingDragged.transform.position = desiredPosition;
-        }
-    }
 
-    float clicked = 0;
-    float clicktime = 0;
-    float clickdelay = 0.5f;
+        } 
+    }
 
     bool DoubleClick()
     {
@@ -138,22 +147,17 @@ public class PlayerController : MonoBehaviour
         endRecipeSequence.Append(PanRotationTween);
        
         var allChildIngredientsList = PanLayer.GetComponentsInChildren<Ingredient>();
+     
         foreach (var child in allChildIngredientsList)
         {
             var destroyObjectTween = child.transform.DOScale(Vector3.zero, 1f).OnComplete(() =>
             {
                 poolManager.DestroyObject(child.gameObject, (PoolObjectType)child.type);
             });
-            endRecipeSequence.Insert(1,destroyObjectTween);
+            endRecipeSequence.Insert(2,destroyObjectTween);
             
         }
 
-        var allChildIngredientsOnManagerList = gameManager.transform.GetComponentsInChildren<Ingredient>();
-        foreach (var child in allChildIngredientsOnManagerList)
-        {
-            var destroyChildTween =  child.transform.DOScale(Vector3.zero, 1f);
-            endRecipeSequence.Insert(1,destroyChildTween);
-        }
 
         endRecipeSequence.OnComplete(() =>
         {
@@ -166,14 +170,24 @@ public class PlayerController : MonoBehaviour
         return pan.transform.position;
     }
 
+    private void DestroyObjects()
+    {
+        var allChildIngredientsList = PanLayer.GetComponentsInChildren<Ingredient>();
+        foreach (var child in allChildIngredientsList)
+        {
+            poolManager.DestroyObject(child.gameObject, (PoolObjectType)child.type);
+        }
+    }
     private void OnEnable()
     {
         ConnectinnoActions.OnRecipeCompleted += ClearPan;
+        ConnectinnoActions.OnReplayLevel += DestroyObjects;
     }
 
     private void OnDestroy()
     {
         ConnectinnoActions.OnRecipeCompleted -= ClearPan;
+        ConnectinnoActions.OnReplayLevel -= DestroyObjects;
     }
 
 

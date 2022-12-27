@@ -6,6 +6,7 @@ using ConnectinnoGames.GameScripts.Ingredients;
 using ConnectinnoGames.Scripts.Builder_Scripts.Managers;
 using ConnectinnoGames.Scripts.UI_Scripts.Pop_up_Scripts;
 using ConnectinnoGames.Managers;
+using System.Threading.Tasks;
 
 namespace ConnectinnoGames.GameScripts
 {
@@ -14,8 +15,6 @@ namespace ConnectinnoGames.GameScripts
         public static GameManager Instance;
 
         [SerializeField] private RecipeDatabase recipeDatabase;
-        [SerializeField] private float safeZonePaddingX;
-        [SerializeField] private float safeZonePaddingY;
         [SerializeField] private int recipeCountPerLevel;
 
         private List<int> currentLevelRecipes = new List<int>();
@@ -30,7 +29,7 @@ namespace ConnectinnoGames.GameScripts
 
         private PoolManager poolManager;
         private ConnectinnoGameData gameData;
-        private SoundScripts.SoundManager soundManager;
+
         
         private void Awake()
         {
@@ -38,7 +37,7 @@ namespace ConnectinnoGames.GameScripts
             DontDestroyOnLoad(this.gameObject);
 
 
-            DOTween.SetTweensCapacity(250, 10);
+            DOTween.SetTweensCapacity(250, 60);
 
             if(SaveManager.SaveExists("SaveData"))
                 gameData = SaveManager.LoadData<ConnectinnoGameData>("SaveData");
@@ -46,6 +45,7 @@ namespace ConnectinnoGames.GameScripts
                 gameData = new ConnectinnoGameData();
             
             CalculateSafeSpawnZone();
+
         }
 
         private async void Start()
@@ -54,20 +54,20 @@ namespace ConnectinnoGames.GameScripts
 
             await SceneLoadManager.LoadScene("MainMenu");
 
-            soundManager = SoundScripts.SoundManager.Instance;
         }
 
         public async void StartGame()
         {
             await SceneLoadManager.LoadScene("Game");
             StartLevel();
+
+            GenerateWordBorders();
         }
 
         private void StartLevel()
         {
             ///Sets Seed Based Random Generation.
-            Random.InitState(gameData.level);
-
+            Random.InitState(gameData.level); 
             //Get random recipies from recipie Database;
             for (int i = 0; i < recipeCountPerLevel; i++)
             {
@@ -99,53 +99,65 @@ namespace ConnectinnoGames.GameScripts
         private void CalculateSafeSpawnZone()
         {
             float aspect = (float)Screen.width / Screen.height;
+            safeWorldHeight = Camera.main.orthographicSize * 2;
+
+            safeWorldWidth = safeWorldHeight * aspect;
+
+        }
+
+        /// <summary>
+        /// Generate Word borders
+        /// </summary>
+        private void GenerateWordBorders()
+        {
+            float aspect = (float)Screen.width / Screen.height;
             float worldHeight = Camera.main.orthographicSize * 2;
 
-            safeWorldHeight = worldHeight - safeZonePaddingY;
+            float WorldHeight = worldHeight;
             float worldWidth = worldHeight * aspect;
 
-            safeWorldWidth = worldWidth - safeZonePaddingX;
+            float WorldWidth = worldWidth;
+
+            var loadedBorderController = Resources.Load<BorderController>("BorderController");
+            var borderController = Instantiate(loadedBorderController);
+
+            var topPanelSize = 2.8f * aspect;
+            borderController.RecalculateBorder(new Vector2(WorldWidth / 2, WorldHeight / 2), topPanelSize);
         }
 
         /// <summary>
         /// Spawn 3D GameObjects
         /// </summary>
-        private void SpawnIngredients()
+        private async void SpawnIngredients()
         {
             ConnectinnoActions.OnRecipeStarted?.Invoke(recipeDatabase.recipes[currentLevelRecipes[currentLevelRecipeIndex]]);
 
-            //Spawn Fake Ingredients
+            var loadedCannonBall = Resources.Load<CannonBall>("Cannonball");
+            var cannonBall = Instantiate(loadedCannonBall);
+            var cannonBallTransform = cannonBall.transform;
+
+            cannonBallTransform.position = new Vector3((safeWorldWidth / 2) - 0.5f, 0, -(safeWorldHeight / 2) + 0.5f);
+
+            //Add To Spawn List Fake Ingredients
             foreach (var fakeIngredients in System.Enum.GetValues(typeof(IngredientType)))
             {
                 //Chek If ingredients is correct ingredient
                 if (CheckIngredientExist((IngredientType)fakeIngredients))
                 {
                     //Create more random fake objects per level
-                    for (int i = 0; i < Random.Range(5, 5 + gameData.level); i++)
+                    for (int i = 0; i < Random.Range(1, 3 + gameData.level); i++)
                     {
-                        var minmaxX = Random.Range(-(safeWorldWidth / 2), safeWorldWidth / 2);
-                        var minmaxy = Random.Range(-(safeWorldHeight / 2), safeWorldHeight / 2);
-                        var fakeObj = poolManager.GetPoolObject((PoolObjectType)fakeIngredients);
-                        fakeObj.transform.DOMove(new Vector2(minmaxX, minmaxy), 1.5f);
-
-                        fakeObj.transform.SetParent(this.transform);
+                        cannonBall.AddSpawnList((PoolObjectType)fakeIngredients);
                     }
-
                 }
-
             }
 
-            //Spawn correct Ingredients
+            //Add To Spawn List Correct Ingredients
             foreach (var ingredient in recipeDatabase.recipes[currentLevelRecipes[currentLevelRecipeIndex]].Ingredients)
             {
-                for(int i = 0; i < Random.Range(ingredient.count + 3, 20); i++)
+                for (int i = 0; i < Random.Range(ingredient.count + 3, 10); i++)
                 {
-                    var minmaxX = Random.Range(-(safeWorldWidth / 2), safeWorldWidth / 2);
-                    var minmaxy = Random.Range(-(safeWorldHeight / 2), safeWorldHeight / 2);
-                    var correctObj = poolManager.GetPoolObject((PoolObjectType)ingredient.ingerientType);
-                    correctObj.transform.DOMove(new Vector2(minmaxX, minmaxy), 1.5f);
-
-                    correctObj.transform.SetParent(this.transform);
+                    cannonBall.AddSpawnList((PoolObjectType)ingredient.ingerientType);
                 }
 
                 for (int i = 0; i < ingredient.count; i++)
@@ -153,8 +165,13 @@ namespace ConnectinnoGames.GameScripts
                     correctIngredientIndex.Add((int)ingredient.ingerientType);
                 }
             }
+
+            await cannonBall.StartSpawnAndThrow();
+
+
         }
 
+        //Check Ingredints is recipe ingredinet
         public bool IsIngredientCorrect(int ingredient)
         {
             if (correctIngredientIndex.Contains(ingredient))
@@ -185,6 +202,10 @@ namespace ConnectinnoGames.GameScripts
 
                 DestroyAllIngredients();
 
+                currentLevelRecipeIndex = 0;
+
+                currentLevelRecipes.Clear();
+
                 PopupManager.ShowPopup(new WinDefinition(NextLevel));
             }
             else 
@@ -197,11 +218,7 @@ namespace ConnectinnoGames.GameScripts
 
         private void NextLevel() 
         {
-            currentLevelRecipeIndex = 0;
-
-            currentLevelRecipes.Clear();
-
-            ConnectinnoActions.OnNextLevelStarted?.Invoke();
+            ConnectinnoActions.StartTimer?.Invoke();
 
             StartLevel();
         }
@@ -227,11 +244,19 @@ namespace ConnectinnoGames.GameScripts
         /// Get Random Safe For Ingredients Positions 
         /// </summary>
         /// <returns></returns>
-        public Vector2 GetRandomSafePosition()
+        public Vector3 GetRandomSafePosition()
         {
+            float aspect = (float)Screen.width / Screen.height;
+            float worldHeight = Camera.main.orthographicSize * 2;
+
+            float worldWidth = worldHeight * aspect;
+
+            var topPanelSize = 3f * aspect;
+            var borderWithSafeWorldHeight = worldWidth - topPanelSize;
+
             var minmaxX = Random.Range(-(safeWorldWidth / 2), safeWorldWidth / 2);
-            var minmaxy = Random.Range(-(safeWorldHeight / 2), safeWorldHeight / 2);
-            return new Vector2(minmaxX, minmaxy);
+            var minmaxy = Random.Range(-(borderWithSafeWorldHeight / 2), borderWithSafeWorldHeight / 2);
+            return new Vector3(minmaxX, 2f, minmaxy);
         }
 
         private void IncreaseCurrentRecipeIndex()

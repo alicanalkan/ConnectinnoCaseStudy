@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recipeDatabase: {fileID: 11400000, guid: e5db1ce881ba726449e7ba57329a0ae5, type: 2}
-  safeZonePaddingX: 0.5
-  safeZonePaddingY: 4
+  safeZonePaddingX: 0
+  safeZonePaddingY: 0
   recipeCountPerLevel: 3
   gameTime: 300
   coinPerLevel: 10

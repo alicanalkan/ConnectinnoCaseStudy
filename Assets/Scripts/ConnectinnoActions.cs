@@ -13,6 +13,6 @@ namespace ConnectinnoGames.GameScripts
         public static Action OnExtraSeconds;
         public static Action<int> OnAddCoin;
         public static Action<int> OnRemoveCoin;
-        public static Action OnNextLevelStarted;
+        public static Action StartTimer;
     }
 }

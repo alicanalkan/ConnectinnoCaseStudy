@@ -12,7 +12,7 @@ public enum IngredientType
     Grape,
     Ham,
     Hamburger,
-    Icrecream,
+    Icecream,
     Kiwi,
     Lemon,
     Mushroom,

@@ -45,8 +45,6 @@ namespace ConnectinnoGames.Scripts.Object_Pooling
                 poolObj.name += $" {i}";
                 poolObj.SetActive(false);
                 info.pooledObjects.Enqueue(poolObj);
-                poolObj.transform.position = Vector3.zero;
-
             }
         }
 
@@ -68,9 +66,8 @@ namespace ConnectinnoGames.Scripts.Object_Pooling
             {
                 poolObj = Instantiate(selectedPool.prefab, transform);
                 poolObj.name += $" {selectedPool.pooledObjects.Count}";
-                poolObj.transform.position = Vector3.zero;
             }
-            poolObj.transform.localScale = Vector3.one;
+
             poolObj.SetActive(true);
 
             return poolObj;
@@ -84,7 +81,6 @@ namespace ConnectinnoGames.Scripts.Object_Pooling
         public void DestroyObject(GameObject poolObj, PoolObjectType type)
         {
             poolObj.SetActive(false);
-            poolObj.transform.localScale = Vector3.one;
 
             if (poolObj.transform.parent != transform)
             {
