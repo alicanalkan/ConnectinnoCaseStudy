@@ -1579,6 +1579,7 @@ MonoBehaviour:
   hapticToggle: {fileID: 1091160739}
   chestImage: {fileID: 1200871897}
   levelText: {fileID: 1291754627}
+  homePage: {fileID: 1881276226}
 --- !u!1 &315031453
 GameObject:
   m_ObjectHideFlags: 0

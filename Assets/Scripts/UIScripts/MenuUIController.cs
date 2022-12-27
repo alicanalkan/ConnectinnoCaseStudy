@@ -18,6 +18,7 @@ namespace ConnectinnoGames.UIScripts
         [SerializeField] Toggle hapticToggle;
         [SerializeField] Image chestImage;
         [SerializeField] TextMeshProUGUI levelText;
+        [SerializeField] Transform homePage;
 
         private GameManager gameManager;
         private ConnectinnoGameData gameData;
@@ -62,7 +63,7 @@ namespace ConnectinnoGames.UIScripts
                 chestImage.sprite = Resources.Load<Sprite>("UI/ChestOpen");
                 if(particle == null)
                 {
-                    particle = Instantiate(Resources.Load<GameObject>("Particle/ChestParticle"));
+                    particle = Instantiate(Resources.Load<GameObject>("Particle/ChestParticle"),homePage);
                     particle.transform.position = new Vector2(chestImage.transform.position.x, chestImage.transform.position.y);
                 }
 
