@@ -26,6 +26,8 @@ namespace ConnectinnoGames.UIScripts
         private Vector3 panPosition;
         private SoundManager soundManager;
 
+        private BaseRecipe ingredients;
+
         private int coinAmount;
 
         private void Start()
@@ -108,6 +110,7 @@ namespace ConnectinnoGames.UIScripts
         /// <param name="recipeIngredients"></param>
         private void UpdateRecipeUI(BaseRecipe recipeIngredients)
         {
+            ingredients = recipeIngredients;
             recipeText.text = recipeIngredients.RecipieName;
             var recipies = recipeIngredients.Ingredients;
             for (int i = 0; i < recipies.Count; i++)
@@ -131,6 +134,24 @@ namespace ConnectinnoGames.UIScripts
             images[ingredientIndex].sprite = (Sprite)request.asset;
             images[ingredientIndex].color = new Color(255, 255, 255, 255);
             IngredientCount[ingredientIndex].text = $"x{ingredient.count}";
+        }
+
+
+        /// <summary>
+        /// Update Sellected type object count on ui
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        public void UpdateIngredientCount(IngredientType type, int count)
+        {
+            for (int i = 0; i < ingredients.Ingredients.Count; i++)
+            {
+                if (ingredients.Ingredients[i].ingerientType == type)
+                {
+                    IngredientCount[i].text = $"x{count}";
+                }
+            }
+           
         }
         /// <summary>
         /// CoinAnimatons
@@ -190,6 +211,7 @@ namespace ConnectinnoGames.UIScripts
             ConnectinnoActions.OnRecipeCompleted += OnRecipeCompleted;
             ConnectinnoActions.OnAddCoin += AddCoin;
             ConnectinnoActions.OnRemoveCoin += RemoveCoin;
+            ConnectinnoActions.OnCorrectIngredientPlaced += UpdateIngredientCount;
         }
         /// <summary>
         /// Unload Action Callbacks for prevent memory leak
@@ -202,6 +224,7 @@ namespace ConnectinnoGames.UIScripts
             ConnectinnoActions.OnRecipeStarted -= UpdateRecipeUI;
             ConnectinnoActions.OnAddCoin -= AddCoin;
             ConnectinnoActions.OnRemoveCoin -= RemoveCoin;
+            ConnectinnoActions.OnCorrectIngredientPlaced -= UpdateIngredientCount;
         }
     }
 }

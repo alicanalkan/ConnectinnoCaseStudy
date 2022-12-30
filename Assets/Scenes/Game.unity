@@ -637,7 +637,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 641540477}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 4d2ca92c86950c241b619bd5a584fee8, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -875,6 +875,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   pan: {fileID: 8446734653432542091}
+  velocityKeppTimeMultiplier: 5
+  velocityTimeMultiplier: 5
 --- !u!4 &902797662
 Transform:
   m_ObjectHideFlags: 0
@@ -2382,20 +2384,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2002350916}
   m_CullTransparentMesh: 1
---- !u!64 &2081808555
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8446734653432542091}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3074104668420476315, guid: c84ec5c9b6d9d0e489d29980ce467d72, type: 3}
 --- !u!23 &1030052271926550369
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2459,7 +2447,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8446734653432542091}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3, z: -3.91}
+  m_LocalPosition: {x: 0, y: 0.78, z: -3.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1709659664909927103}
@@ -2544,8 +2532,8 @@ GameObject:
   - component: {fileID: 3201537612777275484}
   - component: {fileID: 8684429794231984435}
   - component: {fileID: 4438521950763713309}
-  - component: {fileID: 2081808555}
   - component: {fileID: 8446734653432542092}
+  - component: {fileID: 8446734653432542093}
   m_Layer: 0
   m_Name: fryingPan
   m_TagString: Untagged
@@ -2567,6 +2555,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 4570803102770740213}
   panPosition: {fileID: 1709659664909927103}
+--- !u!136 &8446734653432542093
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8446734653432542091}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &8684429794231984435
 MeshFilter:
   m_ObjectHideFlags: 0

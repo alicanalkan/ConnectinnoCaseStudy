@@ -172,11 +172,21 @@ namespace ConnectinnoGames.GameScripts
         }
 
         //Check Ingredints is recipe ingredinet
-        public bool IsIngredientCorrect(int ingredient)
+        public bool IsIngredientCorrect(IngredientType type)
         {
+            var ingredient = (int)type;
             if (correctIngredientIndex.Contains(ingredient))
             {
                 correctIngredientIndex.Remove(ingredient);
+                var count = 0;
+                foreach(var correctingredint in correctIngredientIndex)
+                {
+                    if(correctingredint == ingredient)
+                        count++;
+                }
+
+                ConnectinnoActions.OnCorrectIngredientPlaced?.Invoke(type, count); 
+                
                 CheckIngredientsCompleted();
                 return true;
             }
@@ -317,6 +327,7 @@ namespace ConnectinnoGames.GameScripts
             }
             return true;
         }
+
 
         public void AddCoin(int givenCoinAmount) 
         {

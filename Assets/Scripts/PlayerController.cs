@@ -24,6 +24,11 @@ public class PlayerController : MonoBehaviour
     //Double Click Time
     private float clickdelay = 0.5f;
 
+    private Vector3 oldMause;
+    private float mouseSpeed;
+    [SerializeField] private float velocityKeppTimeMultiplier;
+    [SerializeField] private float velocityTimeMultiplier;
+
     private void Start()
     {
         panGrids = pan.GetComponent<PanGrids>();
@@ -61,11 +66,13 @@ public class PlayerController : MonoBehaviour
                 hit.transform.SetParent(PanLayer);
 
                 // Create tween path 
-                Vector3[] positionArray = new[] { new Vector3(hit.transform.position.x, pan.transform.position.y, hit.transform.position.z), panGrids.panPositions[index].gridPos };
+                //first value over the pan object
+                //second value pan grid position
+                Vector3[] positionArray = new[] { new Vector3(hit.transform.position.x, pan.transform.position.y + 1, hit.transform.position.z), panGrids.panPositions[index].gridPos };
 
-                if (gameManager.IsIngredientCorrect((int)ingredient.type))
+                if (gameManager.IsIngredientCorrect(ingredient.type))
                 {
-                    
+                    //Place to pan
                     hit.transform.DOPath(positionArray, animationTime);
                     hit.transform.gameObject.layer = 7;
                     hit.transform.localEulerAngles = Vector3.zero;
@@ -96,17 +103,38 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(ray, out var hit, Mathf.Infinity, ingredientsLayerMask))
                 {
                     IngredientDragReferenceData.TempObjBeingDragged = hit.transform.gameObject;
+                    IngredientDragReferenceData.TempRigidbody = hit.transform.gameObject.GetComponent<Rigidbody>();
+
+                    // Remove gravity physcis
+                    IngredientDragReferenceData.TempRigidbody.useGravity = false;
+                    var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                    oldMause = new Vector3(worldPosition.x, 0.2f, worldPosition.z);
+
+                    mouseSpeed = velocityTimeMultiplier;
                 }
                 else
                 {
                     IngredientDragReferenceData.TempObjBeingDragged = null;
+                    IngredientDragReferenceData.TempRigidbody = null;
                 }
             }
-            else if (Input.GetMouseButtonUp(0))
+            else if (Input.GetMouseButtonUp(0) && IngredientDragReferenceData.TempObjBeingDragged)
             {
-                IngredientDragReferenceData.TempObjBeingDragged = null;
-            }
+                var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                var mouse_diff = (oldMause - new Vector3(worldPosition.x, 0.2f, worldPosition.z));
 
+                //Check Mouse speed prevent negative values
+                if (mouseSpeed < 0)
+                    mouseSpeed = 0;
+
+                //Set velocity to object
+                IngredientDragReferenceData.TempObjBeingDragged.GetComponent<Rigidbody>().velocity = (mouse_diff * mouseSpeed * -1);
+                IngredientDragReferenceData.TempRigidbody.useGravity = true;
+
+                IngredientDragReferenceData.TempObjBeingDragged = null;
+                IngredientDragReferenceData.TempRigidbody = null;
+
+            }
         }
 
         if (IngredientDragReferenceData.TempObjBeingDragged != null)
@@ -114,7 +142,12 @@ public class PlayerController : MonoBehaviour
             //Tack input position and drag object
             if (IsPointerOverUIElement()) return;
             var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            var desiredPosition = new Vector3(worldPosition.x, 1, worldPosition.z);
+            var desiredPosition = new Vector3(worldPosition.x, 0.2f, worldPosition.z);
+
+            //Down mouse velocity
+            mouseSpeed -= Time.deltaTime * velocityKeppTimeMultiplier;
+
+            //Update ingredient Position
             IngredientDragReferenceData.TempObjBeingDragged.transform.position = desiredPosition;
 
         } 
@@ -122,17 +155,20 @@ public class PlayerController : MonoBehaviour
 
     bool DoubleClick()
     {
+        //first click
         if (Input.GetMouseButtonDown(0))
         {
             clicked++;
             if (clicked == 1) clicktime = Time.time;
         }
+        //second click
         if (clicked > 1 && Time.time - clicktime < clickdelay)
         {
             clicked = 0;
             clicktime = 0;
             return true;
         }
+        //check first and second click time delta
         else if (clicked > 2 || Time.time - clicktime > 1) clicked = 0;
         return false;
     }
@@ -148,6 +184,8 @@ public class PlayerController : MonoBehaviour
        
         var allChildIngredientsList = PanLayer.GetComponentsInChildren<Ingredient>();
      
+
+        //all ingredients scale tween
         foreach (var child in allChildIngredientsList)
         {
             var destroyObjectTween = child.transform.DOScale(Vector3.zero, 1f).OnComplete(() =>
@@ -157,7 +195,6 @@ public class PlayerController : MonoBehaviour
             endRecipeSequence.Insert(2,destroyObjectTween);
             
         }
-
 
         endRecipeSequence.OnComplete(() =>
         {
@@ -234,7 +271,11 @@ public class PlayerController : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Temporary object class
+/// </summary>
 public static class IngredientDragReferenceData
 {
     public static GameObject TempObjBeingDragged;
+    public static Rigidbody TempRigidbody;
 }

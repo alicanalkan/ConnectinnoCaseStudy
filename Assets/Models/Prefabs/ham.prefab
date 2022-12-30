@@ -91,7 +91,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2915731351939732609}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3a5effd16dedbef4080de1da25859d88, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -111,7 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 10
-  isInPan: 0
 --- !u!54 &4941908732118180537
 Rigidbody:
   m_ObjectHideFlags: 0

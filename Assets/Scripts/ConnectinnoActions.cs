@@ -14,5 +14,6 @@ namespace ConnectinnoGames.GameScripts
         public static Action<int> OnAddCoin;
         public static Action<int> OnRemoveCoin;
         public static Action StartTimer;
+        public static Action<IngredientType ,int> OnCorrectIngredientPlaced;
     }
 }
