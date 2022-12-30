@@ -266,7 +266,7 @@ namespace ConnectinnoGames.GameScripts
 
             var minmaxX = Random.Range(-(safeWorldWidth / 2), safeWorldWidth / 2);
             var minmaxy = Random.Range(-(borderWithSafeWorldHeight / 2), borderWithSafeWorldHeight / 2);
-            return new Vector3(minmaxX, 2f, minmaxy);
+            return new Vector3(minmaxX, 0.3f, minmaxy);
         }
 
         private void IncreaseCurrentRecipeIndex()

@@ -62,7 +62,8 @@ public class PlayerController : MonoBehaviour
                 if (animationTime > 1)
                     animationTime = 1;
 
-
+                var rigidBody = hit.transform.GetComponent<Rigidbody>();
+                rigidBody.useGravity = false;
                 hit.transform.SetParent(PanLayer);
 
                 // Create tween path 
@@ -76,7 +77,7 @@ public class PlayerController : MonoBehaviour
                     hit.transform.DOPath(positionArray, animationTime);
                     hit.transform.gameObject.layer = 7;
                     hit.transform.localEulerAngles = Vector3.zero;
-                    hit.transform.GetComponent<Rigidbody>().isKinematic = true;
+                    rigidBody.isKinematic = true;
                     
                     index++;
                 }
@@ -84,7 +85,9 @@ public class PlayerController : MonoBehaviour
                 {
                     //Reset transform tweens;
                     hit.transform.DOPath(positionArray, animationTime).OnComplete(() => {
-                        hit.transform.DOMove(gameManager.GetRandomSafePosition(), animationTime);
+                        hit.transform.DOMove(gameManager.GetRandomSafePosition(), animationTime / 2 );
+                        rigidBody.useGravity = true;
+                        rigidBody.velocity = Vector3.zero;
                     });
                     hit.transform.SetParent(gameManager.transform);
                 }
