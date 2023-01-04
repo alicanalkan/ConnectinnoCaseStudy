@@ -876,7 +876,7 @@ MonoBehaviour:
     m_Bits: 64
   pan: {fileID: 8446734653432542091}
   velocityKeppTimeMultiplier: 5
-  velocityTimeMultiplier: 5
+  velocityMultiplier: 5
 --- !u!4 &902797662
 Transform:
   m_ObjectHideFlags: 0

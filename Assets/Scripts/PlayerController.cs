@@ -24,10 +24,7 @@ public class PlayerController : MonoBehaviour
     //Double Click Time
     private float clickdelay = 0.5f;
 
-    private Vector3 oldMause;
-    private float mouseSpeed;
-    [SerializeField] private float velocityKeppTimeMultiplier;
-    [SerializeField] private float velocityTimeMultiplier;
+    [SerializeField] private float velocityMultiplier;
 
     private void Start()
     {
@@ -37,143 +34,103 @@ public class PlayerController : MonoBehaviour
         poolManager = PoolManager.Instance;
 
     }
+
+
     /// <summary>
     /// This scripts allow to control ingredients
     /// </summary>
     void Update()
     {
-        
-        if (DoubleClick())
+        if (Input.GetMouseButtonDown(0))
         {
-            if (IsPointerOverUIElement()) return;
-            var mouse = Input.mousePosition;
-            var ray = Camera.main.ScreenPointToRay(mouse);
+            ///Racast Ingredients layer Masks
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var raycastResult = Physics.Raycast(ray, out var raycastHit, Mathf.Infinity, ingredientsLayerMask);
 
-            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, ingredientsLayerMask))
+            if (raycastResult)
             {
+                IngredientDragReferenceData.TempObjBeingDragged = raycastHit.transform.gameObject;
+                IngredientDragReferenceData.TempRigidbody = raycastHit.transform.gameObject.GetComponent<Rigidbody>();
 
-                var durationMultiplier = Vector2.Distance(hit.transform.position, panGrids.panPositions[index].gridPos);
+                clicked++;
 
-                Ingredient ingredient = hit.transform.GetComponent<Ingredient>();
+                if (clicked == 1) clicktime = Time.time;
 
-                //Calculate animaton time
-                var animationTime = 5 / durationMultiplier;
-
-                if (animationTime > 1)
-                    animationTime = 1;
-
-                var rigidBody = hit.transform.GetComponent<Rigidbody>();
-                rigidBody.useGravity = false;
-                hit.transform.SetParent(PanLayer);
-
-                // Create tween path 
-                //first value over the pan object
-                //second value pan grid position
-                Vector3[] positionArray = new[] { new Vector3(hit.transform.position.x, pan.transform.position.y + 1, hit.transform.position.z), panGrids.panPositions[index].gridPos };
-
-                if (gameManager.IsIngredientCorrect(ingredient.type))
+                //Check is doubleClick detected
+                if (clicked > 1 && Time.time - clicktime < clickdelay)
                 {
-                    //Place to pan
-                    hit.transform.DOPath(positionArray, animationTime);
-                    hit.transform.gameObject.layer = 7;
-                    hit.transform.localEulerAngles = Vector3.zero;
-                    rigidBody.isKinematic = true;
+                    //reset clicked count & clicktime
+                    clicked = 0;
+                    clicktime = 0;
+
+                    DoubleClickObject(raycastHit.transform.gameObject);
                     
-                    index++;
+                    //return;
                 }
-                else
-                {
-                    //Reset transform tweens;
-                    hit.transform.DOPath(positionArray, animationTime).OnComplete(() => {
-                        hit.transform.DOMove(gameManager.GetRandomSafePosition(), animationTime / 2 );
-                        rigidBody.useGravity = true;
-                        rigidBody.velocity = Vector3.zero;
-                    });
-                    hit.transform.SetParent(gameManager.transform);
-                }
+                else if (clicked > 2 || Time.time - clicktime > 1) clicked = 0;
             }
         }
-        else
+
+        //double click not detected start dragging
+        if (IngredientDragReferenceData.TempObjBeingDragged)
         {
-            //Drag handler
-            if (Input.GetMouseButtonDown(0))
+            if (IsPointerOverUIElement()) return;
+
+            var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            var targetPosition = new Vector3(worldPosition.x, 0, worldPosition.z);
+            var velocity = Vector3.zero;
+            var desiredPosition = Vector3.SmoothDamp(IngredientDragReferenceData.TempObjBeingDragged.transform.position, targetPosition, ref velocity, 0.02f);
+
+            IngredientDragReferenceData.TempRigidbody.useGravity = false;
+           
+            //Update ingredient Position
+            IngredientDragReferenceData.TempRigidbody.MovePosition(desiredPosition);
+
+            if (Input.GetMouseButtonUp(0))
             {
-                if(IsPointerOverUIElement()) return;
-
-                var mouse = Input.mousePosition;
-                var ray = Camera.main.ScreenPointToRay(mouse);
-
-                if (Physics.Raycast(ray, out var hit, Mathf.Infinity, ingredientsLayerMask))
-                {
-                    IngredientDragReferenceData.TempObjBeingDragged = hit.transform.gameObject;
-                    IngredientDragReferenceData.TempRigidbody = hit.transform.gameObject.GetComponent<Rigidbody>();
-
-                    // Remove gravity physcis
-                    IngredientDragReferenceData.TempRigidbody.useGravity = false;
-                    var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                    oldMause = new Vector3(worldPosition.x, 0.2f, worldPosition.z);
-
-                    mouseSpeed = velocityTimeMultiplier;
-                }
-                else
-                {
-                    IngredientDragReferenceData.TempObjBeingDragged = null;
-                    IngredientDragReferenceData.TempRigidbody = null;
-                }
-            }
-            else if (Input.GetMouseButtonUp(0) && IngredientDragReferenceData.TempObjBeingDragged)
-            {
-                var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                var mouse_diff = (oldMause - new Vector3(worldPosition.x, 0.2f, worldPosition.z));
-
-                //Check Mouse speed prevent negative values
-                if (mouseSpeed < 0)
-                    mouseSpeed = 0;
-
                 //Set velocity to object
-                IngredientDragReferenceData.TempObjBeingDragged.GetComponent<Rigidbody>().velocity = (mouse_diff * mouseSpeed * -1);
+                IngredientDragReferenceData.TempRigidbody.velocity = (targetPosition - IngredientDragReferenceData.TempObjBeingDragged.transform.position) * velocityMultiplier;
+
                 IngredientDragReferenceData.TempRigidbody.useGravity = true;
 
                 IngredientDragReferenceData.TempObjBeingDragged = null;
                 IngredientDragReferenceData.TempRigidbody = null;
-
             }
         }
-
-        if (IngredientDragReferenceData.TempObjBeingDragged != null)
-        {
-            //Tack input position and drag object
-            if (IsPointerOverUIElement()) return;
-            var worldPosition = (Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            var desiredPosition = new Vector3(worldPosition.x, 0.2f, worldPosition.z);
-
-            //Down mouse velocity
-            mouseSpeed -= Time.deltaTime * velocityKeppTimeMultiplier;
-
-            //Update ingredient Position
-            IngredientDragReferenceData.TempObjBeingDragged.transform.position = desiredPosition;
-
-        } 
     }
 
-    bool DoubleClick()
+    private void DoubleClickObject(GameObject Ingredient)
     {
-        //first click
-        if (Input.GetMouseButtonDown(0))
+        Ingredient ingredient = Ingredient.transform.GetComponent<Ingredient>();
+
+        //Calculate animaton time
+        var animationTime = GetAnimationTimeBetweenCords(Ingredient.transform.position, panGrids.panPositions[index].gridPos);
+
+        IngredientDragReferenceData.TempRigidbody.useGravity = false;
+        Ingredient.transform.SetParent(PanLayer);
+
+        // Create tween path 
+        //first value over the pan object
+        //second value pan grid position
+        Vector3[] positionArray = new[] { new Vector3(Ingredient.transform.position.x, pan.transform.position.y + 1, Ingredient.transform.position.z), panGrids.panPositions[index].gridPos };
+
+        if (gameManager.IsIngredientCorrect(ingredient.type))
         {
-            clicked++;
-            if (clicked == 1) clicktime = Time.time;
+            //Place to pan
+            Ingredient.transform.DOPath(positionArray, animationTime);
+            Ingredient.transform.gameObject.layer = 7;
+            Ingredient.transform.localEulerAngles = Vector3.zero;
+            var rb = Ingredient.GetComponent<Rigidbody>().isKinematic = true;
+            index++;
         }
-        //second click
-        if (clicked > 1 && Time.time - clicktime < clickdelay)
+        else
         {
-            clicked = 0;
-            clicktime = 0;
-            return true;
+            //Reset transform tweens;
+            Ingredient.transform.DOPath(positionArray, animationTime).OnComplete(() => {
+                Ingredient.transform.DOMove(gameManager.GetRandomSafePosition(), animationTime / 2);
+            });
+            Ingredient.transform.SetParent(gameManager.transform);
         }
-        //check first and second click time delta
-        else if (clicked > 2 || Time.time - clicktime > 1) clicked = 0;
-        return false;
     }
 
     private void ClearPan()
@@ -271,6 +228,17 @@ public class PlayerController : MonoBehaviour
         var raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raycastResults);
         return raycastResults;
+    }
+
+
+    private float GetAnimationTimeBetweenCords(Vector2 fistPos, Vector2 secondPos)
+    {
+        var durationMultiplier = Vector2.Distance(fistPos, secondPos);
+        var animationTime = 5 / durationMultiplier;
+
+        if (animationTime > 1)
+            animationTime = 1;
+        return animationTime;
     }
 }
 
